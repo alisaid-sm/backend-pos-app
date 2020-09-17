@@ -30,6 +30,16 @@ const response = {
 
         res.json(result)
     },
+    successToken: (res, data, message) => {
+        const result = {
+            message,
+            success: true,
+            code: 300,
+            data
+        }
+
+        res.json(result)
+    }
 
 }
 

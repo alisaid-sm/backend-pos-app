@@ -1,4 +1,6 @@
 const historyModels = require('../models/history')
+const redis = require('redis')
+const client = redis.createClient()
 
 const { success, failed, successWithMeta } = require('../helper/response')
 
@@ -13,6 +15,7 @@ const history = {
             const offset = page === 1 ? 0 : (page - 1) * limit
             historyModels.getAll(search, field, sortType, offset, limit)
                 .then((result) => {
+                    client.set('history', JSON.stringify(result))
                     const totalRows = result[0].count
                     const totalPage = Math.ceil(totalRows / limit)
                     const meta = {
@@ -49,8 +52,21 @@ const history = {
         try {
             const data = req.body
             historyModels.insert(data)
+            // console.log(data)
                 .then((result) => {
-                    success(res, result, 'Insert data success')
+                    console.log(result)
+                    const idMaster = result.insertId
+                    const insertDetail = data.detail.map((item) => {
+                        item.id_history = idMaster
+                        historyModels.insertDetail(item)
+                    })
+                    Promise.all(insertDetail)
+                        .then(() => {
+                           success(res, result, 'Insert data history success') 
+                        })
+                        .catch((err) => {
+                            failed(res, [], err.message)
+                        })
                 })
                 .catch((err) => {
                     failed(res, [], err.message)

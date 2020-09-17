@@ -1,4 +1,6 @@
 const categoryModels = require('../models/category')
+const redis = require('redis')
+const client = redis.createClient()
 
 const { success, failed, successWithMeta } = require('../helper/response')
 
@@ -14,6 +16,7 @@ const category = {
 
             categoryModels.getAll(search, field, sortType, offset, limit)
                 .then((result) => {
+                    client.set('category', JSON.stringify(result))
                     const totalRows = result[0].count
                     const totalPage = Math.ceil(totalRows / limit)
                     const meta = {

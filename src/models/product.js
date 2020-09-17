@@ -15,6 +15,18 @@ const product = {
         })
 
     },
+    getAlldata: () => {
+        return new Promise((resolve, reject) => {
+            db.query(`SELECT * , (SELECT COUNT(*) FROM product) AS count FROM product LEFT JOIN category ON product.id_category=category.id_category`, (err, result) => {
+                if (err) {
+                    reject(new Error(err))
+                } else {
+                    resolve(result)
+                }
+            })
+        })
+
+    },
     getDetail: (id) => {
         return new Promise((resolve, reject) => {
             db.query(`SELECT * FROM product LEFT JOIN category ON product.id_category=category.id_category WHERE id_product='${id}'`, (err, result) => {

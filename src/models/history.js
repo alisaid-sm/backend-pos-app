@@ -13,6 +13,18 @@ const history = {
         })
 
     },
+    getAlldata: () => {
+        return new Promise((resolve, reject) => {
+            db.query(`SELECT * , (SELECT COUNT(*) FROM history) AS count FROM history`, (err, result) => {
+                if (err) {
+                    reject(new Error(err))
+                } else {
+                    resolve(result)
+                }
+            })
+        })
+
+    },
     getDetail: (id) => {
         return new Promise((resolve, reject) => {
             db.query(`SELECT * FROM history WHERE invoices='${id}'`, (err, result) => {
@@ -26,8 +38,18 @@ const history = {
     },
     insert: (data) => {
         return new Promise((resolve, reject) => {
-            db.query(`INSERT INTO history (cashier, date, orders, amount) 
-            VALUES ('${data.cashier}', '${data.date}', '${data.orders}','${data.amount}')`, (err, result) => {
+            db.query(`INSERT INTO history (invoices, cashier) VALUES ('${data.invoices}', '${data.cashier}')`, (err, result) => {
+                if (err) {
+                    reject(new Error(err))
+                } else {
+                    resolve(result)
+                }
+            })
+        })
+    },
+    insertDetail: (data) => {
+        return new Promise((resolve, reject) => {
+            db.query(`INSERT INTO history_detail SET ?`, data, (err, result) => {
                 if (err) {
                     reject(new Error(err))
                 } else {

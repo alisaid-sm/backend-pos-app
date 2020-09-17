@@ -1,34 +1,36 @@
 const express = require('express')
 
 const productController = require('../controller/product')
-
 const categoryController = require('../controller/category')
-
 const historyController = require('../controller/history')
-
-const upload = require('../helper/upload')
+const usersController = require('../controller/users')
+const { authentication, authorization } = require('../helper/auth')
+const redis = require('../helper/redis')
 
 const router = express.Router()
 
 router
     //CRUD tabel product
-    .get('/product/getall', productController.getAll)
-    .get('/product/getdetail/:id', productController.getDetail)
-    .post('/product/insert', upload.single('image'), productController.insert)
-    .put('/product/update/:id', upload.single('image'), productController.update)
-    .patch('/product/updatepatch/:id', upload.single('image'), productController.updatePatch)
-    .delete('/product/delete/:id', productController.delete)
+    .get('/product/getall', authentication, authorization,redis.getProduct, productController.getAll)
+    .get('/product/getdetail/:id', authentication, authorization,redis.getProductDetail, productController.getDetail)
+    .post('/product/insert', authentication, authorization, productController.insert)
+    .put('/product/update/:id', authentication, authorization, productController.update)
+    .patch('/product/updatepatch/:id', authentication, authorization, productController.updatePatch)
+    .delete('/product/delete/:id', authentication, authorization, productController.delete)
     //CRUD tabel history
-    .get('/history/getall', historyController.getAll)
-    .get('/history/getdetail/:id', historyController.getDetail)
-    .post('/history/insert', historyController.insert)
-    .put('/history/update/:id', historyController.update)
-    .delete('/history/delete/:id', historyController.delete)
+    .get('/history/getall', authentication, authorization,redis.getHistory, historyController.getAll)
+    .get('/history/getdetail/:id', authentication, authorization, historyController.getDetail)
+    .post('/history/insert', authentication, authorization, historyController.insert)
+    .put('/history/update/:id', authentication, authorization, historyController.update)
+    .delete('/history/delete/:id', authentication, authorization, historyController.delete)
     //CRUD tabel category
-    .get('/category/getall', categoryController.getAll)
-    .get('/category/getdetail/:id', categoryController.getDetail)
-    .post('/category/insert', categoryController.insert)
-    .put('/category/update/:id', categoryController.update)
-    .delete('/category/delete/:id', categoryController.delete)
+    .get('/category/getall', authentication, authorization,redis.getCategory, categoryController.getAll)
+    .get('/category/getdetail/:id', authentication, authorization, categoryController.getDetail)
+    .post('/category/insert', authentication, authorization, categoryController.insert)
+    .put('/category/update/:id', authentication, authorization, categoryController.update)
+    .delete('/category/delete/:id', authentication, authorization, categoryController.delete)
+    //CRUD tabel users
+    .post('/users/register', usersController.register)
+    .post('/users/login', usersController.login)
 
 module.exports = router
