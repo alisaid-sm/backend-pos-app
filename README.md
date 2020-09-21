@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # backend-pos-app
 Proyek ini adalah REST API yang digunakan untuk pos app
 
