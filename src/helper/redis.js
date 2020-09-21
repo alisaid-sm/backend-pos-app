@@ -83,7 +83,7 @@ module.exports = {
                 }
                 if (search !== '') {
                     const datafix = _.filter(dataPagination, (obj) => {
-                        return obj.name.toLowerCase().includes(search.toLowerCase())
+                        return obj.cashier.toLowerCase().includes(search.toLowerCase())
                         // console.log(obj.name.toLowerCase().includes(search.toLowerCase()))
                     })
                     successWithMeta(res, datafix, meta, 'get data from redis success')
@@ -94,6 +94,22 @@ module.exports = {
                     const datafix = dataPagination
                     successWithMeta(res, datafix, meta, 'get data from redis success')
                 }
+            } else {
+                next()
+            }
+        })
+    },
+    getHistoryDetail: (req, res, next) => {
+        client.get('historydetail', (err, data) => {
+            if (data !== null && data !== '[]') {
+                const dataRedis = JSON.parse(data)
+                const id = req.params.id
+                if (dataRedis[0].id_history == id) {
+                    success(res, dataRedis, 'Get detail from redis success')
+                } else {
+                    next()
+                }
+                
             } else {
                 next()
             }
@@ -121,7 +137,7 @@ module.exports = {
                 }
                 if (search !== '') {
                     const datafix = _.filter(dataPagination, (obj) => {
-                        return obj.name.toLowerCase().includes(search.toLowerCase())
+                        return obj.category.toLowerCase().includes(search.toLowerCase())
                         // console.log(obj.name.toLowerCase().includes(search.toLowerCase()))
                     })
                     successWithMeta(res, datafix, meta, 'get data from redis success')
@@ -132,6 +148,22 @@ module.exports = {
                     const datafix = dataPagination
                     successWithMeta(res, datafix, meta, 'get data from redis success')
                 }
+            } else {//662
+                next()
+            }
+        })
+    },
+    getCategoryDetail: (req, res, next) => {
+        client.get('historydetail', (err, data) => {
+            if (data !== 'null' && data !== '[]') {
+                const dataRedis = JSON.parse(data)
+                const id = req.params.id
+                if (dataRedis[0].id_category == id) {
+                    success(res, dataRedis, 'Get detail from redis success')
+                } else {
+                    next()
+                }
+                
             } else {
                 next()
             }

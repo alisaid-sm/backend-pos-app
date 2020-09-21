@@ -29,6 +29,14 @@ const category = {
                 .catch((err) => {
                     failed(res, [], err.message)
                 })
+            categoryModels.getAlldata()
+                .then((result) => {
+                    client.del('history')
+                    client.set('history', JSON.stringify(result))
+                })
+                .catch((err) => {
+                    failed(res, [], err.message)
+                })
         } catch (error) {
             failed(res, [], 'internal server error')
         }
@@ -39,6 +47,8 @@ const category = {
             const id = req.params.id
             categoryModels.getDetail(id)
                 .then((result) => {
+                    client.del('categorydetail')
+                    client.set('categorydetail', JSON.stringify(result))
                     success(res, result, 'Get detail data success')
                 })
                 .catch((err) => {
@@ -54,6 +64,14 @@ const category = {
             const data = req.body
             categoryModels.insert(data)
                 .then((result) => {
+                    client.del('category')
+                    categoryModels.getAlldata()
+                        .then((result) => {
+                            client.set('category', JSON.stringify(result))
+                        })
+                        .catch((err) => {
+                            failed(res, [], err.message)
+                        })
                     success(res, result, 'Insert data success')
                 })
                 .catch((err) => {
@@ -70,6 +88,14 @@ const category = {
             const data = req.body
             categoryModels.update(id, data)
                 .then((result) => {
+                    client.del('category')
+                    categoryModels.getAlldata()
+                        .then((result) => {
+                            client.set('category', JSON.stringify(result))
+                        })
+                        .catch((err) => {
+                            failed(res, [], err.message)
+                        })
                     success(res, result, 'Update data success')
                 })
                 .catch((err) => {
@@ -85,6 +111,14 @@ const category = {
             const id = req.params.id
             categoryModels.delete(id)
                 .then((result) => {
+                    client.del('category')
+                    categoryModels.getAlldata()
+                        .then((result) => {
+                            client.set('category', JSON.stringify(result))
+                        })
+                        .catch((err) => {
+                            failed(res, [], err.message)
+                        })
                     success(res, result, 'Delete data success')
                 })
                 .catch((err) => {

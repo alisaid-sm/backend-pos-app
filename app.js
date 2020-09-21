@@ -6,7 +6,7 @@ const cors = require('cors')
 
 const appRouter = require('./src/router/approuter')
 
-const PORT = 3000
+const { PORT } = require('./src/helper/env')
 
 const app = express()
 

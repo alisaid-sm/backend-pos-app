@@ -19,18 +19,19 @@ router
     .delete('/product/delete/:id', authentication, authorization, productController.delete)
     //CRUD tabel history
     .get('/history/getall', authentication, authorization,redis.getHistory, historyController.getAll)
-    .get('/history/getdetail/:id', authentication, authorization, historyController.getDetail)
+    .get('/history/getdetail/:id', authentication, authorization,redis.getHistoryDetail, historyController.getDetail)
     .post('/history/insert', authentication, authorization, historyController.insert)
     .put('/history/update/:id', authentication, authorization, historyController.update)
     .delete('/history/delete/:id', authentication, authorization, historyController.delete)
     //CRUD tabel category
     .get('/category/getall', authentication, authorization,redis.getCategory, categoryController.getAll)
-    .get('/category/getdetail/:id', authentication, authorization, categoryController.getDetail)
+    .get('/category/getdetail/:id', authentication, authorization,redis.getCategoryDetail, categoryController.getDetail)
     .post('/category/insert', authentication, authorization, categoryController.insert)
     .put('/category/update/:id', authentication, authorization, categoryController.update)
     .delete('/category/delete/:id', authentication, authorization, categoryController.delete)
     //CRUD tabel users
     .post('/users/register', usersController.register)
     .post('/users/login', usersController.login)
+    .post('/users/refresh-token', usersController.renewToken)
 
 module.exports = router

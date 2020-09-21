@@ -8,7 +8,7 @@ const history = {
     getAll: (req, res) => {
         try {
             const search = !req.query.search ? '' : req.query.search
-            const field = !req.query.sort ? 'invoices' : req.query.sort
+            const field = !req.query.sort ? 'id_history' : req.query.sort
             const sortType = !req.query.sorttype ? 'ASC' : req.query.sorttype
             const limit = !req.query.limit ? 10 : parseInt(req.query.limit)
             const page = !req.query.page ? 1 : parseInt(req.query.page)
@@ -28,6 +28,14 @@ const history = {
                 .catch((err) => {
                     failed(res, [], err.message)
                 })
+            historyModels.getAlldata()
+                .then((result) => {
+                    client.del('history')
+                    client.set('history', JSON.stringify(result))
+                })
+                .catch((err) => {
+                    failed(res, [], err.message)
+                })
         } catch (error) {
             failed(res, [], 'internal server error')
         }
@@ -38,6 +46,8 @@ const history = {
             const id = req.params.id
             historyModels.getDetail(id)
                 .then((result) => {
+                    client.del('historydetail')
+                    client.set('historydetail', JSON.stringify(result))
                     success(res, result, 'Get detail data success')
                 })
                 .catch((err) => {
@@ -62,6 +72,14 @@ const history = {
                     })
                     Promise.all(insertDetail)
                         .then(() => {
+                            client.del('history')
+                            historyModels.getAlldata()
+                                .then((result) => {
+                                    client.set('history', JSON.stringify(result))
+                                })
+                                .catch((err) => {
+                                    failed(res, [], err.message)
+                                })
                            success(res, result, 'Insert data history success') 
                         })
                         .catch((err) => {
@@ -82,6 +100,14 @@ const history = {
             const data = req.body
             historyModels.update(id, data)
                 .then((result) => {
+                    client.del('history')
+                    historyModels.getAlldata()
+                        .then((result) => {
+                            client.set('history', JSON.stringify(result))
+                        })
+                        .catch((err) => {
+                            failed(res, [], err.message)
+                        })
                     success(res, result, 'Update data success')
                 })
                 .catch((err) => {
@@ -97,6 +123,15 @@ const history = {
             const id = req.params.id
             historyModels.delete(id)
                 .then((result) => {
+                    historyModels.deleteDetail(id)
+                    client.del('history')
+                    historyModels.getAlldata()
+                        .then((result) => {
+                            client.set('history', JSON.stringify(result))
+                        })
+                        .catch((err) => {
+                            failed(res, [], err.message)
+                        })
                     success(res, result, 'Delete data success')
                 })
                 .catch((err) => {

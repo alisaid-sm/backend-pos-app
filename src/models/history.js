@@ -27,7 +27,7 @@ const history = {
     },
     getDetail: (id) => {
         return new Promise((resolve, reject) => {
-            db.query(`SELECT * FROM history WHERE invoices='${id}'`, (err, result) => {
+            db.query(`SELECT * FROM history WHERE id_history='${id}'`, (err, result) => {
                 if (err) {
                     reject(new Error(err))
                 } else {
@@ -61,10 +61,8 @@ const history = {
     update: (id, data) => {
         return new Promise((resolve, reject) => {
             db.query(`UPDATE history SET 
-                cashier='${data.cashier}', 
-                date='${data.date}', 
-                orders='${data.orders}', 
-                amount='${data.amount}' WHERE invoices='${id}'`, (err, result) => {
+                invoices='${data.invoices}', 
+                cashier='${data.cashier}' WHERE id_history='${id}'`, (err, result) => {
                 if (err) {
                     reject(new Error(err))
                 } else {
@@ -75,7 +73,18 @@ const history = {
     },
     delete: (id) => {
         return new Promise((resolve, reject) => {
-            db.query(`DELETE FROM history WHERE invoices='${id}'`, (err, result) => {
+            db.query(`DELETE FROM history WHERE id_history='${id}'`, (err, result) => {
+                if (err) {
+                    reject(new Error(err))
+                } else {
+                    resolve(result)
+                }
+            })
+        })
+    },
+    deleteDetail: (id) => {
+        return new Promise((resolve, reject) => {
+            db.query(`DELETE FROM history_detail WHERE id_history='${id}'`, (err, result) => {
                 if (err) {
                     reject(new Error(err))
                 } else {

@@ -65,7 +65,7 @@ const product = {
             upload.single('image')(req, res, (err) => {
                 if (err) {
                     if (err.code === 'LIMIT_FILE_SIZE') {
-                        failed(res, [], 'File too large')
+                        failed(res, [], 'File too large, max size 100kb')
                     } else {
                         failed(res, [], err)
                     }
@@ -101,7 +101,11 @@ const product = {
         try {
             upload.single('image')(req, res, (err) => {
                 if (err) {
-                    failed(res, [], err.message)
+                    if (err.code === 'LIMIT_FILE_SIZE') {
+                        failed(res, [], 'File too large, max size 100kb')
+                    } else {
+                        failed(res, [], err)
+                    }
                 } else {
                     const id = req.params.id
                     const data = req.body
