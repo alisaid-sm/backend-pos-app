@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # backend-pos-app
 Proyek ini adalah REST API yang digunakan untuk pos app
 
@@ -16,3 +17,14 @@ Proyek ini adalah REST API yang digunakan untuk pos app
 
    Multer adalah middleware node.js yang digunakan untuk upload file di multipart/form-data
 
+=======
+# backend-pos-app
+Proyek ini adalah REST API yang dibuat menggunakan exprees.js yang digunakan untuk pos app
+
+didalam proyek ini terdapat:
+
+1. 4 route: users, product, history, category 
+2. Terdapat fiture CRUD
+3. Terdapat fitur search, sort, pagination
+4. Sudah menggunakan JWT dan Redis
+>>>>>>> 861ed48f8001cf41bd47e95c883981b9e00c5264
