@@ -17,7 +17,7 @@ const response = {
             data
         }
 
-        res.json(result)
+        res.status(500).json(result)
     },
     successWithMeta: (res, data, meta, message) => {
         const result = {
@@ -39,6 +39,16 @@ const response = {
         }
 
         res.json(result)
+    },
+    errToken: (res, data, message) => {
+        const result = {
+            message,
+            success: false,
+            code: 500,
+            data
+        }
+
+        res.status(500).json(result)
     }
 
 }
