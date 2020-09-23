@@ -3,7 +3,7 @@ const response = {
         const result = {
             message,
             success: true,
-            code: 300,
+            code: 200,
             data
         }
 
@@ -23,7 +23,7 @@ const response = {
         const result = {
             message,
             success: true,
-            code: 300,
+            code: 200,
             meta,
             data
         }
@@ -34,7 +34,7 @@ const response = {
         const result = {
             message,
             success: true,
-            code: 300,
+            code: 200,
             data
         }
 
