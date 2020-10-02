@@ -11,8 +11,8 @@ module.exports = {
             if (data) {
                 const dataRedis = JSON.parse(data); // <= data yang sebelumnya string dikonversi ke json
                 const search = !req.query.search ? '' : req.query.search; // <= default search
-                const field = !req.query.sort ? 'date' : req.query.sort;// <= default sort field
-                const sortType = !req.query.sorttype ? 'desc' : req.query.sorttype; // <= default type sort
+                const field = !req.query.sort ? 'id_product' : req.query.sort;// <= default sort field
+                const sortType = !req.query.sorttype ? 'asc' : req.query.sorttype; // <= default type sort
                 const limit = !req.query.limit ? 10 : parseInt(req.query.limit); // <= default limit
                 const page = !req.query.page ? 1 : parseInt(req.query.page); // <= default page
                 const offset = page === 1 ? 0 : (page - 1) * limit; // default offset
