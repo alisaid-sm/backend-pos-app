@@ -17,7 +17,7 @@ const product = {
     },
     getAlldata: () => {
         return new Promise((resolve, reject) => {
-            db.query(`SELECT * , (SELECT COUNT(*) FROM product) AS count FROM product LEFT JOIN category ON product.id_category=category.id_category`, (err, result) => {
+            db.query('SELECT * , (SELECT COUNT(*) FROM product) AS count FROM product LEFT JOIN category ON product.id_category=category.id_category', (err, result) => {
                 if (err) {
                     reject(new Error(err))
                 } else {
@@ -52,25 +52,41 @@ const product = {
     },
     update: (id, data) => {
         return new Promise((resolve, reject) => {
-            db.query(`SELECT image FROM product WHERE id_product=?`, [id], (err, result) => {
+            db.query('SELECT image FROM product WHERE id_product=?', [id], (err, result) => {
                 if (err) {
                     reject(new Error(err))
                 } else {
                     const image = result[0].image
                     fs.unlink(`src/upload/${image}`, (err) => {
                         // console.log(`${image} was deleted`);
-                        db.query(`UPDATE product SET 
+                        if (err) {
+                            console.log(err.message)
+                            db.query(`UPDATE product SET 
                             name='${data.name}', 
                             id_category='${data.id_category}', 
                             price='${data.price}', 
                             image='${data.image}' WHERE id_product='${id}'`, (err, result) => {
-                            if (err) {
-                                reject(new Error(err))
-                            } else {
-                                resolve(result)
-                            }
-                        })
-                    });
+                                if (err) {
+                                    reject(new Error(err))
+                                } else {
+                                    resolve(result)
+                                }
+                            })
+                        } else {
+                            db.query(`UPDATE product SET 
+                            name='${data.name}', 
+                            id_category='${data.id_category}', 
+                            price='${data.price}', 
+                            image='${data.image}' WHERE id_product='${id}'`, (err, result) => {
+                                if (err) {
+                                    reject(new Error(err))
+                                } else {
+                                    resolve(result)
+                                }
+                            })
+                        }
+                        
+                    })
                 }
             })
         })
@@ -78,42 +94,42 @@ const product = {
     updatePatch: (id, data) => {
         return new Promise((resolve, reject) => {
 
-            db.query(`SELECT image FROM product WHERE id_product=?`, [id], (err, result) => {
+            db.query('SELECT image FROM product WHERE id_product=?', [id], (err, result) => {
                 if (err) {
                     reject(new Error(err))
                 } else {
                     const image = result[0].image
                     fs.unlink(`src/upload/${image}`, (err) => {
                         // console.log(`${image} was deleted`);
-                        db.query(`UPDATE product SET ? WHERE id_product= ?`, [data, id], (err, result) => {
+                        db.query('UPDATE product SET ? WHERE id_product= ?', [data, id], (err, result) => {
                             if (err) {
                                 reject(new Error(err))
                             } else {
                                 resolve(result)
                             }
                         })
-                    });
+                    })
                 }
             })
         })
     },
     delete: (id) => {
         return new Promise((resolve, reject) => {
-            db.query(`SELECT image FROM product WHERE id_product=?`, [id], (err, result) => {
+            db.query('SELECT image FROM product WHERE id_product=?', [id], (err, result) => {
                 if (err) {
                     reject(new Error(err))
                 } else {
                     const image = result[0].image
                     fs.unlink(`src/upload/${image}`, (err) => {
                         // console.log(`${image} was deleted`);
-                        db.query(`DELETE FROM product WHERE id_product=?`, [id], (err, result) => {
+                        db.query('DELETE FROM product WHERE id_product=?', [id], (err, result) => {
                             if (err) {
                                 reject(new Error(err))
                             } else {
                                 resolve(result)
                             }
                         })
-                    });
+                    })
                 }
             })
         })

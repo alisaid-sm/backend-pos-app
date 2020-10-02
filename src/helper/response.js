@@ -5,9 +5,9 @@ const response = {
             success: true,
             code: 200,
             data
-        }
+        };
 
-        res.json(result)
+        res.json(result);
     },
     failed: (res, data, message) => {
         const result = {
@@ -15,9 +15,9 @@ const response = {
             success: false,
             code: 500,
             data
-        }
+        };
 
-        res.status(500).json(result)
+        res.json(result);
     },
     successWithMeta: (res, data, meta, message) => {
         const result = {
@@ -26,9 +26,9 @@ const response = {
             code: 200,
             meta,
             data
-        }
+        };
 
-        res.json(result)
+        res.json(result);
     },
     successToken: (res, data, message) => {
         const result = {
@@ -36,9 +36,9 @@ const response = {
             success: true,
             code: 200,
             data
-        }
+        };
 
-        res.json(result)
+        res.json(result);
     },
     errToken: (res, data, message) => {
         const result = {
@@ -46,11 +46,21 @@ const response = {
             success: false,
             code: 500,
             data
-        }
+        };
 
-        res.status(500).json(result)
+        res.json(result);
+    },
+    errTokenExpired: (res, data, message) => {
+        const result = {
+            message,
+            success: false,
+            code: 500,
+            data
+        };
+
+        res.status(500).json(result);
     }
 
-}
+};
 
-module.exports = response
+module.exports = response;

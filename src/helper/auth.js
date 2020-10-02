@@ -1,6 +1,6 @@
-const jwt = require('jsonwebtoken');
-const { privateKey } = require('../helper/env');
-const { errToken } = require('./response');
+const jwt = require('jsonwebtoken')
+const { privateKey } = require('../helper/env')
+const { errToken, errTokenExpired } = require('./response')
 
 const auth = {
     authentication: (req, res, next ) => {
@@ -15,13 +15,13 @@ const auth = {
         const token = req.headers.token
         jwt.verify(token, privateKey, (err, decoded) => {
             if (err && err.name === 'TokenExpiredError') {
-                errToken(res, [], 'authentication failed token expired')
+                errTokenExpired(res, [], 'authentication failed token expired')
             } else if (err) {
                 errToken(res, [], 'authentication failed incorrect token')
             } else {
                 next()
             }
-          })
+        })
     }
 }
 

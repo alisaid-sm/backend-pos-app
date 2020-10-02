@@ -15,7 +15,7 @@ const category = {
     },
     getAlldata: () => {
         return new Promise((resolve, reject) => {
-            db.query(`SELECT * , (SELECT COUNT(*) FROM category) AS count FROM category`, (err, result) => {
+            db.query('SELECT * , (SELECT COUNT(*) FROM category) AS count FROM category', (err, result) => {
                 if (err) {
                     reject(new Error(err))
                 } else {

@@ -15,7 +15,7 @@ const history = {
     },
     getAlldata: () => {
         return new Promise((resolve, reject) => {
-            db.query(`SELECT * , (SELECT COUNT(*) FROM history) AS count FROM history`, (err, result) => {
+            db.query('SELECT * , (SELECT COUNT(*) FROM history) AS count FROM history', (err, result) => {
                 if (err) {
                     reject(new Error(err))
                 } else {
@@ -49,7 +49,7 @@ const history = {
     },
     insertDetail: (data) => {
         return new Promise((resolve, reject) => {
-            db.query(`INSERT INTO history_detail SET ?`, data, (err, result) => {
+            db.query('INSERT INTO history_detail SET ?', data, (err, result) => {
                 if (err) {
                     reject(new Error(err))
                 } else {

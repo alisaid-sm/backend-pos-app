@@ -1,15 +1,15 @@
 const usersModels = require('../models/users')
 const { success, failed, successWithMeta, successToken } = require('../helper/response')
 const bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken')
 const { privateKey } = require('../helper/env')
 
 const users = {
     register: async (req, res) => {
         try {
             const data = req.body
-            const salt = await bcrypt.genSaltSync(10);
-            const hash = await bcrypt.hashSync(data.password, salt);
+            const salt = await bcrypt.genSaltSync(10)
+            const hash = await bcrypt.hashSync(data.password, salt)
             // console.log(hash)
             const dataNew = {
                 email: data.email,
@@ -31,35 +31,35 @@ const users = {
         try {
             const data = req.body
             usersModels.login(data)
-             .then( async (result) => {
-                const results = result[0]
-                const match = await bcrypt.compare(data.password, results.password);
-                if (match) {
-                    jwt.sign({ email: results.email }, privateKey, { expiresIn: 3600},
-                        (err, token) => {
-                            if (err) {
-                                failed(res, [], err.message)
-                            } else {
-                                const id = results.id
-                                const refreshToken = jwt.sign({id}, 'REFRESH TOKEN 123')
-                                usersModels.updateRefreshToken(refreshToken, id)
-                                    .then(() => {
-                                        const data = {
-                                            token,
-                                            refreshToken
-                                        }
-                                        successToken(res, data, 'login success')
-                                    })
-                                    .catch((err) => {
-                                        console.log(err)
-                                    })
+                .then( async (result) => {
+                    const results = result[0]
+                    const match = await bcrypt.compare(data.password, results.password)
+                    if (match) {
+                        jwt.sign({ email: results.email }, privateKey, { expiresIn: 3600},
+                            (err, token) => {
+                                if (err) {
+                                    failed(res, [], err.message)
+                                } else {
+                                    const id = results.id
+                                    const refreshToken = jwt.sign({id}, 'REFRESH TOKEN 123')
+                                    usersModels.updateRefreshToken(refreshToken, id)
+                                        .then(() => {
+                                            const data = {
+                                                token,
+                                                refreshToken
+                                            }
+                                            successToken(res, data, 'login success')
+                                        })
+                                        .catch((err) => {
+                                            console.log(err)
+                                        })
+                                }
                             }
-                        }
                         )
-                } else {
-                    failed(res, [], 'password salah')
-                }
-             })
+                    } else {
+                        failed(res, [], 'password salah')
+                    }
+                })
         } catch (error) {
             failed(res, [], 'internal server error')
         }

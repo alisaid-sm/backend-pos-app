@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 require('dotenv').config();
 
 module.exports = {
@@ -7,4 +8,4 @@ module.exports = {
     DB_NAME: process.env.DB_NAME,
     privateKey: process.env.privateKey,
     PORT: process.env.PORT
-}
+};
