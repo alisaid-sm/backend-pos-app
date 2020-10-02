@@ -146,8 +146,8 @@ const product = {
                 } else {
                     const id = req.params.id;
                     const data = req.body;
-                    data.image = req.file.filename;
-                    // console.log(data)
+                    //data.image = req.file.filename !== 'undefined' ? req.file.filename : '';
+                    console.log(data);
                     productModels.updatePatch(id, data)
                         .then((result) => {
                             client.del('product');
