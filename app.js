@@ -1,27 +1,27 @@
-const express = require('express')
+const express = require('express');
 
-const bodyParser = require('body-parser')
+const bodyParser = require('body-parser');
 
-const cors = require('cors')
+const cors = require('cors');
 
-const appRouter = require('./src/router/approuter')
+const appRouter = require('./src/router/approuter');
 
-const { PORT } = require('./src/helper/env')
+const { PORT } = require('./src/helper/env');
 
-const app = express()
+const app = express();
 
 // parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({ extended: false }));
 
 // parse application/json
-app.use(bodyParser.json())
+app.use(bodyParser.json());
 
-app.use(cors())
+app.use(cors());
 
 app
     .use('/api/v1', appRouter)
-    .use(express.static('src/upload'))
+    .use(express.static('src/upload'));
 
 app.listen(PORT, () => {
-    console.log(`server running on port ${PORT}`)
-})
+    console.log(`server running on port ${PORT}`);
+});

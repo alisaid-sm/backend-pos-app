@@ -2,6 +2,7 @@ const productModels = require('../models/product');
 const redis = require('redis');
 const client = redis.createClient();
 const upload = require('../helper/upload');
+const fs = require('fs');
 
 const { success, failed, successWithMeta } = require('../helper/response');
 
@@ -106,26 +107,46 @@ const product = {
                     }
                 } else {
                     const id = req.params.id;
-                    const data = req.body;
-                    data.image = req.file.filename;
-                    productModels.update(id, data)
+                    productModels.getDetail(id)
                         .then((result) => {
-                            client.del('product');
-                            productModels.getAlldata()
-                                .then((result) => {
-                                    client.set('product', JSON.stringify(result));
-                                })
-                                .catch((err) => {
-                                    failed(res, [], err.message);
+                            const data = req.body;
+                            const oldImg = result[0].image;
+                            data.image = !req.file ? oldImg : req.file.filename;
+                            if (data.image !== oldImg) {
+                                fs.unlink(`src/upload/${oldImg}`, () => {
+                                    productModels.update(id, data)
+                                        .then((result) => {
+                                            client.del('product');
+                                            productModels.getAlldata()
+                                                .then((result) => {
+                                                    client.set('product', JSON.stringify(result));
+                                                })
+                                                .catch((err) => {
+                                                    failed(res, [], err.message);
+                                                });
+                                            success(res, result, 'Update data success');
+                                        })
+                                        .catch((err) => {
+                                            failed(res, [], err.message);
+                                        });
                                 });
-                            success(res, result, 'Update data success');
-                        })
-                        .catch((err) => {
-                            failed(res, [], err.message);
-                        });
-                    productModels.getAlldata()
-                        .then((result) => {
-                            client.set('product', JSON.stringify(result));
+                            } else {
+                                productModels.update(id, data)
+                                    .then((result) => {
+                                        client.del('product');
+                                        productModels.getAlldata()
+                                            .then((result) => {
+                                                client.set('product', JSON.stringify(result));
+                                            })
+                                            .catch((err) => {
+                                                failed(res, [], err.message);
+                                            });
+                                        success(res, result, 'Update data success');
+                                    })
+                                    .catch((err) => {
+                                        failed(res, [], err.message);
+                                    });
+                            }
                         })
                         .catch((err) => {
                             failed(res, [], err.message);
@@ -145,20 +166,46 @@ const product = {
                     failed(res, [], err.message);
                 } else {
                     const id = req.params.id;
-                    const data = req.body;
-                    //data.image = req.file.filename !== 'undefined' ? req.file.filename : '';
-                    console.log(data);
-                    productModels.updatePatch(id, data)
+                    productModels.getDetail(id)
                         .then((result) => {
-                            client.del('product');
-                            productModels.getAlldata()
-                                .then((result) => {
-                                    client.set('product', JSON.stringify(result));
-                                })
-                                .catch((err) => {
-                                    failed(res, [], err.message);
+                            const data = req.body;
+                            const oldImg = result[0].image;
+                            data.image = !req.file ? oldImg : req.file.filename;
+                            if (data.image !== oldImg) {
+                                fs.unlink(`src/upload/${oldImg}`, () => {
+                                    productModels.updatePatch(id, data)
+                                        .then((result) => {
+                                            client.del('product');
+                                            productModels.getAlldata()
+                                                .then((result) => {
+                                                    client.set('product', JSON.stringify(result));
+                                                })
+                                                .catch((err) => {
+                                                    failed(res, [], err.message);
+                                                });
+                                            success(res, result, 'Update data success');
+                                        })
+                                        .catch((err) => {
+                                            failed(res, [], err.message);
+                                        });
                                 });
-                            success(res, result, 'Update data success');
+                            } else {
+                                productModels.updatePatch(id, data)
+                                    .then((result) => {
+                                        client.del('product');
+                                        productModels.getAlldata()
+                                            .then((result) => {
+                                                client.set('product', JSON.stringify(result));
+                                            })
+                                            .catch((err) => {
+                                                failed(res, [], err.message);
+                                            });
+                                        success(res, result, 'Update data success');
+                                    })
+                                    .catch((err) => {
+                                        failed(res, [], err.message);
+                                    });
+                            }
                         })
                         .catch((err) => {
                             failed(res, [], err.message);
@@ -174,17 +221,26 @@ const product = {
     delete: (req, res) => {
         try {
             const id = req.params.id;
-            productModels.delete(id)
+            productModels.getDetail(id)
                 .then((result) => {
-                    client.del('product');
-                    productModels.getAlldata()
-                        .then((result) => {
-                            client.set('product', JSON.stringify(result));
-                        })
-                        .catch((err) => {
-                            failed(res, [], err.message);
-                        });
-                    success(res, result, 'delete data berhasil');
+                    const oldImg = result[0].image;
+                    fs.unlink(`src/upload/${oldImg}`, () => {
+                        productModels.delete(id)
+                            .then((result) => {
+                                client.del('product');
+                                productModels.getAlldata()
+                                    .then((result) => {
+                                        client.set('product', JSON.stringify(result));
+                                    })
+                                    .catch((err) => {
+                                        failed(res, [], err.message);
+                                    });
+                                success(res, result, 'delete data berhasil');
+                            })
+                            .catch((err) => {
+                                failed(res, [], err.message);
+                            });
+                    });
                 })
                 .catch((err) => {
                     failed(res, [], err.message);
