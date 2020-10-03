@@ -32,6 +32,7 @@ router
     //CRUD tabel users
     .post('/users/register', usersController.register)
     .post('/users/login', usersController.login)
-    .post('/users/refresh-token', usersController.renewToken);
+    .post('/users/refresh-token', usersController.renewToken)
+    .get('/users/active/:token', usersController.active);
 
 module.exports = router;
