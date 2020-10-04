@@ -23,7 +23,7 @@ const users = {
                     const output = `
                     <center><h3>Hello ${data.email}</h3>
                     <h3>Thank you for registration</h3>
-                    <p>You can confirm your email by clicking the link below <br> <a href="http://localhost:3000/api/v1/users/active/${token}">Activation</a></p></center>
+                    <p>You can confirm your email by clicking the link below <br> <a href="http://34.228.247.42:3000/api/v1/users/active/${token}">Activation</a></p></center>
                     `;
                     let transporter = nodemailer.createTransport({
                         host: 'smtp.gmail.com',
