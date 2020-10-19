@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 const express = require('express');
 
 const bodyParser = require('body-parser');
@@ -13,7 +14,11 @@ const ejs = require('ejs');
 
 const app = express();
 
-// eslint-disable-next-line no-undef
+app.use(express.static(path.join(__dirname, './dist')));
+app.use('*', (req, res) => {
+    res.sendFile(__dirname, './dist/index.html');
+});
+
 app.set('views', path.join(__dirname, 'src/views'));
 app.set('view engine', 'ejs');
 
