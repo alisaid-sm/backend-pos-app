@@ -7,7 +7,7 @@ const { PORT } = require('./src/helper/env');
 const path = require('path');
 // eslint-disable-next-line no-unused-vars
 const ejs = require('ejs');
-var history = require('connect-history-api-fallback');
+// var history = require('connect-history-api-fallback');
 const app = express();
 
 // app.use(express.static(path.join(__dirname, './dist')));
@@ -16,7 +16,7 @@ const app = express();
 // });
 
 // Support history api 
-app.use(history());
+// app.use(history());
 app.use(express.static(path.join(__dirname, './dist')));
 app.use('*', (req, res) => {
     res.sendFile(__dirname, './dist/index.html');
