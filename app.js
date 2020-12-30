@@ -18,7 +18,7 @@ const app = express();
 // Support history api 
 // app.use(history());
 app.use(express.static(path.join(__dirname, './dist')));
-app.use('*', (req, res) => {
+app.use('/' || '/login' || '/regiter' || '/history', (req, res) => {
     res.sendFile(__dirname, './dist/index.html');
 });
 
